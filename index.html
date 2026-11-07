@@ -255,8 +255,10 @@ button:hover{
             認証
         </button>
 
-         <button onclick="toggleWarningEffect()">
-        警告演出: <span id="effectStatus">ON</span>
+         <button id="warningButton"
+         onclick="toggleWarningEffect()">
+        警告演出: 
+        <span id="effectStatus">ON</span>
         </button>
 
 
@@ -333,6 +335,8 @@ window.onload = () => {
     ){
         showContent();
     }
+
+    updateWarningButton();
 
     document.getElementById(
     "effectStatus"
@@ -568,6 +572,53 @@ setInterval(() => {
 
 }, 150);
 
+function updateWarningButton(){
+
+    const button =
+        document.getElementById(
+            "warningButton"
+        );
+
+    if(warningEffect){
+
+        // ON
+        button.style.borderColor = "red";
+        button.style.color = "red";
+        button.style.boxShadow =
+            "0 0 10px red";
+
+        button.onmouseenter = () => {
+            button.style.background = "red";
+            button.style.color = "black";
+        };
+
+        button.onmouseleave = () => {
+            button.style.background = "#102030";
+            button.style.color = "red";
+        };
+
+    }else{
+
+        // OFF
+        button.style.borderColor = "#00ffff";
+        button.style.color = "#00ffff";
+        button.style.boxShadow =
+            "0 0 10px #00ffff";
+
+        button.onmouseenter = () => {
+            button.style.background = "#00ffff";
+            button.style.color = "black";
+        };
+
+        button.onmouseleave = () => {
+            button.style.background = "#102030";
+            button.style.color = "#00ffff";
+        };
+
+    }
+
+}
+
 function toggleWarningEffect(){
 
     warningEffect = !warningEffect;
@@ -583,6 +634,8 @@ function toggleWarningEffect(){
         warningEffect
         ? "ON"
         : "OFF";
+
+        updateWarningButton();
 
 }
 
