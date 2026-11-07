@@ -635,7 +635,32 @@ function toggleWarningEffect(){
         ? "ON"
         : "OFF";
 
-        updateWarningButton();
+    updateWarningButton();
+
+    const button =
+        document.getElementById(
+            "warningButton"
+        );
+
+    if(warningEffect){
+
+        button.style.background =
+            "red";
+
+        button.style.color =
+            "black";
+
+    }else{
+
+        button.style.background =
+            "#00ffff";
+
+        button.style.color =
+            "black";
+
+    }
+
+    
 
 }
 
