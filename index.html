@@ -255,6 +255,11 @@ button:hover{
             認証
         </button>
 
+         <button onclick="toggleWarningEffect()">
+        警告演出: <span id="effectStatus">ON</span>
+        </button>
+
+
         <p id="message"></p>
 
     </div>
@@ -314,6 +319,9 @@ const LOGIN_MINUTES = 1;
 let failedCount = 0;
 const MAX_TRIES = 3;
 
+let warningEffect = localStorage.getItem("warningEffect")
+    !== "false";
+
 window.onload = () => {
 
     const expire =
@@ -325,6 +333,13 @@ window.onload = () => {
     ){
         showContent();
     }
+
+    document.getElementById(
+    "effectStatus"
+    ).textContent =
+    warningEffect
+    ? "ON"
+    : "OFF";
 
     document
         .getElementById("password")
@@ -373,6 +388,54 @@ function login(){
         
          if(failedCount >= MAX_TRIES){
 
+             if(!warningEffect){
+
+            document.body.innerHTML = `
+            <div style="
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+
+        background-color:#070b14;
+
+        background-image:
+            linear-gradient(
+                rgba(0,255,255,0.08) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgba(0,255,255,0.08) 1px,
+                transparent 1px
+            ),
+            radial-gradient(
+                circle at center,
+                #13213d,
+                #070b14 70%
+            );
+
+        background-size:
+            50px 50px,
+            50px 50px,
+            cover;
+
+        color:#00ffff;
+
+        font-size:60px;
+        font-family:monospace;
+
+        text-shadow:
+            0 0 5px #00ffff,
+            0 0 15px #00ffff;
+    ">
+        ACCESS DENIED
+    </div>
+            `;
+
+        return;
+        }
+
             document.body.innerHTML = `
 
             <div style="
@@ -407,9 +470,20 @@ function login(){
                 </span>
                 </p>
             <div class="warning-line"></div>
+            
+                <h2 id="countdown"
+            style="
+            color:red;
+            margin-top:30px;
+            font-size:40px;
+            ">
+            </h2>
+
 
             </div>
             `;
+
+            setTimeout(startCountdown, 5000);
         }
     }
 
@@ -493,26 +567,85 @@ setInterval(() => {
 
 }, 150);
 
-function showContent(){
+function toggleWarningEffect(){
 
-    document
-        .getElementById("login")
-        .style.display = "none";
+    warningEffect = !warningEffect;
 
-    document
-        .getElementById("content")
-        .style.display = "block";
+    localStorage.setItem(
+        "warningEffect",
+        warningEffect
+    );
 
-    const expire =
-        Number(localStorage.getItem("loginExpire"));
+    document.getElementById(
+        "effectStatus"
+    ).textContent =
+        warningEffect
+        ? "ON"
+        : "OFF";
 
-    if(expire){
-        setTimeout(() => {
-            logout();
-        }, expire - Date.now());
-    }
 }
 
+
+function startCountdown(){
+
+    let time = 10;
+
+    const countdown =
+        document.getElementById(
+            "countdown"
+        );
+
+    countdown.textContent =
+        "SYSTEM FAILURE : " + time;
+
+    const timer = setInterval(() => {
+
+        time--;
+
+        countdown.textContent =
+            "SYSTEM FAILURE : " + time;
+
+        if(time <= 0){
+
+            clearInterval(timer);
+
+            showErrorScreen();
+
+        }
+
+    }, 1000);
+
+}
+
+function showErrorScreen(){
+
+    let errors = "";
+
+    for(let i=0;i<1200;i++){
+
+        errors +=
+            "ERROR ";
+
+    }
+
+    document.body.innerHTML = `
+        <div style="
+            background:black;
+            color:red;
+            height:100vh;
+            overflow:hidden;
+            font-family:monospace;
+            font-size:20px;
+            font-weight:bold;
+            padding:10px;
+            line-height:1.1;
+            word-wrap:break-word;
+        ">
+            ${errors}
+        </div>
+    `;
+
+}
 </script>
 
 </body>
