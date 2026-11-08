@@ -698,33 +698,46 @@ function startCountdown(){
 
 function showErrorScreen(){
 
-    let errors = "";
-
-    for(let i=0;i<1200;i++){
-
-        errors +=
-            "ERROR ";
-
-    }
-
     document.body.innerHTML = `
         <div style="
             background:black;
-            color:red;
+            width:100vw;
             height:100vh;
-            overflow:hidden;
-            font-family:monospace;
-            font-size:20px;
-            font-weight:bold;
-            padding:10px;
-            line-height:1.1;
-            word-wrap:break-word;
         ">
-            ${errors}
         </div>
     `;
 
+    setTimeout(() => {
+
+        let errors = "";
+
+        for(let i=0;i<5000;i++){
+        errors += "ERROR ";
+        }
+
+        document.body.innerHTML = `
+            <div style="
+                background:black;
+                color:red;
+                height:100vh;
+                overflow:hidden;
+                font-family:monospace;
+                font-size:17px;
+                font-weight:bold;
+                padding:0;
+                margin:0;
+                line-height:1.1;
+                word-wrap:break-word;
+                text-align:center;
+            ">
+                ${errors}
+            </div>
+        `;
+
+    }, 2000);
+
 }
+
 </script>
 
 </body>
